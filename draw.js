@@ -17,6 +17,7 @@ function draw() {
     strokeWeight(2)
 
     beginShape();
+    ellipse(body[0].x, body[0].y, 4)
     for (var i = 0; i < body.length; i++) {
         var body_point = body[i]
         console.log(body_point)

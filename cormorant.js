@@ -4,14 +4,16 @@ class Cormorant {
         this.spine_length = 200
         this.default_spine_theta = (3 * PI) / 4
         this.default_head_theta = PI
+        this.default_wing_stretch = 0.8
 
         // fixed point where it is standing
         this.base = {x: width / 2, y: 3 * height / 4}
     }
 
-    get_bird(spine_theta, head_theta) {
+    get_bird(spine_theta, head_theta, wing_stretch) {
         head_theta = head_theta ? head_theta : this.default_head_theta
         spine_theta = spine_theta ? spine_theta : this.default_spine_theta
+        wing_stretch = wing_stretch ? wing_stretch : this.default_wing_stretch
 
         /* Body:  |\
                   |  \
@@ -41,6 +43,7 @@ class Cormorant {
 
         bird.neck = this.neck(spine_top)
         bird.feet = this.feet()
+        bird.wings = this.wings(spine_top, spine_theta, wing_stretch)
 
         return bird
     }
@@ -86,6 +89,41 @@ class Cormorant {
             {x: this.base.x + toe_length, y: leg_end_y + (leg_length / 2)},
             {x: this.base.x, y: leg_end_y},
         ]
+    }
+
+    wings(spine_top, spine_theta, stretch) {
+        /* Wings
+                 __
+            / \   /    / \
+           /    \/|\\/    \
+                  |  \
+                   \__\
+                    ^
+        */
+        var wingspan = this.spine_length * 1.5
+        stretch = wingspan * stretch
+
+        var wing_top = this.complete_line(spine_top, spine_theta, -1 * this.spine_length / 8)
+        var wings = []
+        var skew = [1.2, 0.8]
+        for (var d = 0; d < 2; d ++) {
+            var spans = [stretch * 0.2, stretch * 0.4, stretch * 0.4]
+            var lengths = [wingspan * 0.2, wingspan * 0.4, wingspan * 0.4]
+
+            var wing = [wing_top]
+            for (var i = 0; i < 3; i++) {
+                var x = Math.round(wing[i].x + (((-1) ** d) * spans[i]) * skew[d])
+                var sign = (-1) ** (i % 2)
+                var y = Math.round(wing[i].y + sign * Math.sqrt((lengths[i] ** 2) - (spans[i] ** 2)))
+                if (!y) {
+                    debugger;
+                }
+                wing.push({x, y})
+            }
+            wings.push(wing)
+        }
+
+        return wings
     }
 
     complete_line(point, theta, length) {

@@ -19,7 +19,7 @@ function draw() {
     draw_bird(bird)
     head_theta += sin(x / 4) / 200
     spine_theta += sin(x / 8) / 400
-    wing_stretch += sin(x / 8) / 50
+    wing_stretch += sin(x / 9) / 40
     x++
 }
 

@@ -107,8 +107,9 @@ class Cormorant {
         var wings = []
         var skew = [1.2, 0.8]
         for (var d = 0; d < 2; d ++) {
-            var spans = [stretch * 0.2, stretch * 0.4, stretch * 0.4]
-            var lengths = [wingspan * 0.2, wingspan * 0.4, wingspan * 0.4]
+            var ratios = [0.1, 0.4, 0.5]
+            var spans = ratios.map(x => x * stretch)
+            var lengths = ratios.map(x => x * wingspan)
 
             var wing = [wing_top]
             for (var i = 0; i < 3; i++) {
